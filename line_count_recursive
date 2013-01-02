@@ -1,7 +1,0 @@
-#!/bin/bash
-
-pattern="*"
-
-[ "$#" -eq 1 ] && pattern="$1"
-
-wc -l `find . -name "$pattern"` 2> /dev/null
