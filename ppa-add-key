@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if test -z $1; then {   echo "This tool lets you add PPA's from behind a restrictive firewall."; 
+                        echo "Don't use PPA name/address, instead supply PPA key (eg. C7917B12) as an argument.";
+                        echo "Usage: ppa-add-key [HEXKEY]"; exit 1; }; fi
+
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys $1
