@@ -1,7 +1,14 @@
 #!/bin/bash
-JOURNAL=/home/luke/Dropbox/Apps/Markdown\ Journal/
+
+# Set these environment variables to make it work on other systems
+[ -n "$JOURNAL_BROWSER" ] || JOURNAL_BROWSER=elinks 
+[ -n "$JOURNAL_DIR" ] || JOURNAL_DIR=/home/luke/Dropbox/Apps/Markdown\ Journal/
+
 FILE=$(date +"%Y-%m.%B.markdown")
 
-command -v mkdview >/dev/null 2>&1 || { echo "Mkdview is not installed. Please install it and try again"; exit 1; }
-
-[ -f "$JOURNAL$FILE" ] && mkdview "$JOURNAL$FILE"
+if [ -f "$JOURNAL_DIR$FILE" ]; then
+    pandoc -s "$JOURNAL_DIR$FILE" -o /tmp/$$.html
+    $JOURNAL_BROWSER /tmp/$$.html
+else
+    echo Sorry, no such file
+fi
