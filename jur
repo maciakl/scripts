@@ -1,0 +1,7 @@
+#!/bin/bash
+JOURNAL=/home/luke/Dropbox/Apps/Markdown\ Journal/
+FILE=$(date +"%Y-%m.%B.markdown")
+
+command -v mkdview >/dev/null 2>&1 || { echo "Mkdview is not installed. Please install it and try again"; exit 1; }
+
+[ -f "$JOURNAL$FILE" ] && mkdview "$JOURNAL$FILE"
