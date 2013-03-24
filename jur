@@ -2,13 +2,32 @@
 
 # Set these environment variables to make it work on other systems
 [ -n "$JOURNAL_BROWSER" ] || JOURNAL_BROWSER=elinks 
-[ -n "$JOURNAL_DIR" ] || JOURNAL_DIR=/home/luke/Dropbox/Apps/Markdown\ Journal/
+[ -n "$JOURNAL_DIR" ] || JOURNAL_DIR=/home/luke/Dropbox/Apps/Markdown\ Journal
+
+# cygwin users - link your dropbox folder in cygwin file system - like: /foo/bar
+# use the unix style path in your variable - the script will translate later
+# you will need windows version of pandoc since cygwin doesn't have it yet
 
 FILE=$(date +"%Y-%m.%B.markdown")
 
 if [ -f "$JOURNAL_DIR$FILE" ]; then
-    pandoc -s "$JOURNAL_DIR$FILE" -o /tmp/$$.html
-    $JOURNAL_BROWSER /tmp/$$.html
+
+    # Make sure the script still works under cygwin with windows version of pandoc
+    if [ $(uname -o) == "Cygwin" ]; then
+        # translate paths to windows ones for pandoc.exe
+        JOURNAL_FILE="$(cygpath -aw "$JOURNAL_DIR")/$FILE"
+        JOURNAL_TMP="$(cygpath -aw "/tmp")/$$.html"
+    else
+        # use normal unix paths
+        JOURNAL_FILE="$JOURNAL_DIR/$FILE"
+        JOURNAL_TMP=/tmp/$$.html
+    fi
+
+    # convert file
+    pandoc -s "$JOURNAL_FILE" -o $JOURNAL_TMP
+
+    # open in a browser
+    $JOURNAL_BROWSER $JOURNAL_TMP
 else
-    echo Sorry, no such file
+    echo Sorry, no such file: $JOURNAL_DIR/$FILE
 fi
