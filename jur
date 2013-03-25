@@ -10,7 +10,7 @@
 
 FILE=$(date +"%Y-%m.%B.markdown")
 
-if [ -f "$JOURNAL_DIR$FILE" ]; then
+if [ -f "$JOURNAL_DIR/$FILE" ]; then
 
     # Make sure the script still works under cygwin with windows version of pandoc
     if [ $(uname -o) == "Cygwin" ]; then
