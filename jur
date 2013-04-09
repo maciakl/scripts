@@ -16,15 +16,21 @@ if [ -f "$JOURNAL_DIR/$FILE" ]; then
     if [ $(uname -o) == "Cygwin" ]; then
         # translate paths to windows ones for pandoc.exe
         JOURNAL_FILE="$(cygpath -aw "$JOURNAL_DIR")/$FILE"
+        JOURNAL_STYLE="$(cygpath -aw "$JOURNAL_DIR")/style"
         JOURNAL_TMP="$(cygpath -aw "/tmp")/$$.html"
     else
         # use normal unix paths
         JOURNAL_FILE="$JOURNAL_DIR/$FILE"
+        JOURNAL_STYLE="$JOURNAL_DIR/style"
         JOURNAL_TMP=/tmp/$$.html
     fi
 
     # convert file
-    pandoc -s "$JOURNAL_FILE" -o $JOURNAL_TMP
+    if [ -f "$JOURNAL_STYLE" ]; then
+        pandoc -s "$JOURNAL_FILE" -H "$JOURNAL_STYLE" -o $JOURNAL_TMP
+    else
+        pandoc -s "$JOURNAL_FILE" -o $JOURNAL_TMP
+    fi
 
     # open in a browser
     $JOURNAL_BROWSER $JOURNAL_TMP
