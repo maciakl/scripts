@@ -3,6 +3,7 @@
 # Set these environment variables to make it work on other systems
 [ -n "$JOURNAL_BROWSER" ] || JOURNAL_BROWSER=elinks 
 [ -n "$JOURNAL_DIR" ] || JOURNAL_DIR=/home/luke/Dropbox/Apps/Markdown\ Journal
+[ -n "$JOURNAL_PANDOC_OPTS" ] || JOURNAL_PANDOC_OPTS="--section-divs"
 
 # cygwin users - link your dropbox folder in cygwin file system - like: /foo/bar
 # use the unix style path in your variable - the script will translate later
@@ -27,7 +28,7 @@ if [ -f "$JOURNAL_DIR/$FILE" ]; then
 
     # convert file
     if [ -f "$JOURNAL_STYLE" ]; then
-        pandoc -s "$JOURNAL_FILE" -H "$JOURNAL_STYLE" -o $JOURNAL_TMP
+        pandoc $JOURNAL_PANDOC_OPTS -s "$JOURNAL_FILE" -H "$JOURNAL_STYLE" -o $JOURNAL_TMP
     else
         pandoc -s "$JOURNAL_FILE" -o $JOURNAL_TMP
     fi
