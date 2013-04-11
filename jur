@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PAGE_TITLE=$(date +"%B %Y")
+PAGE_TITLE=$(date +"%B-%Y")
 
 # Set these environment variables to make it work on other systems
 [ -n "$JOURNAL_BROWSER" ] || JOURNAL_BROWSER=elinks 
