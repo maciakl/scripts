@@ -3,7 +3,7 @@
 PAGE_TITLE=$(date +"%B-%Y")
 
 # Set these environment variables to make it work on other systems
-[ -n "$JOURNAL_BROWSER" ] || JOURNAL_BROWSER=elinks 
+[ -n "$JOURNAL_BROWSER" ] || JOURNAL_BROWSER=links 
 [ -n "$JOURNAL_DIR" ] || JOURNAL_DIR=/home/luke/Dropbox/Apps/Markdown\ Journal
 [ -n "$JOURNAL_PANDOC_OPTS" ] || JOURNAL_PANDOC_OPTS="--section-divs --title-prefix=$PAGE_TITLE"
 
@@ -16,7 +16,7 @@ FILE=$(date +"%Y-%m.%B.markdown")
 if [ -f "$JOURNAL_DIR/$FILE" ]; then
 
     # Make sure the script still works under cygwin with windows version of pandoc
-    if [ $(uname -o) == "Cygwin" ]; then
+    if [ $(uname -s) == "Cygwin" ]; then
         # translate paths to windows ones for pandoc.exe
         JOURNAL_FILE="$(cygpath -aw "$JOURNAL_DIR")/$FILE"
         JOURNAL_STYLE="$(cygpath -aw "$JOURNAL_DIR")/style"
