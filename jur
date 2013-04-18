@@ -36,7 +36,7 @@ if [ -f "$JOURNAL_DIR/$FILE" ]; then
     fi
 
     # open in a browser
-    "$JOURNAL_BROWSER" $JOURNAL_TMP
+    eval "$JOURNAL_BROWSER" $JOURNAL_TMP
 else
     echo Sorry, no such file: $JOURNAL_DIR/$FILE
 fi
