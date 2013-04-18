@@ -16,7 +16,7 @@ FILE=$(date +"%Y-%m.%B.markdown")
 if [ -f "$JOURNAL_DIR/$FILE" ]; then
 
     # Make sure the script still works under cygwin with windows version of pandoc
-    if [ $(uname -s) == "Cygwin" ]; then
+    if [[ $(uname -s) == "CYGWIN"* ]]; then
         # translate paths to windows ones for pandoc.exe
         JOURNAL_FILE="$(cygpath -aw "$JOURNAL_DIR")/$FILE"
         JOURNAL_STYLE="$(cygpath -aw "$JOURNAL_DIR")/style"
@@ -35,8 +35,9 @@ if [ -f "$JOURNAL_DIR/$FILE" ]; then
         pandoc -s "$JOURNAL_FILE" -o $JOURNAL_TMP
     fi
 
+    echo $JOURNAL_TMP
     # open in a browser
-    eval "$JOURNAL_BROWSER" $JOURNAL_TMP
+    eval "$JOURNAL_BROWSER" '$JOURNAL_TMP'
 else
     echo Sorry, no such file: $JOURNAL_DIR/$FILE
 fi
