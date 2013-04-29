@@ -1,0 +1,30 @@
+#!/bin/bash
+
+command -v git >/dev/null 2>&1 || { echo "git not found. Please install it and try again"; exit 1; }
+
+if [ -d $HOME/scripts ]; then
+    echo Checking scripts...
+    cd $HOME/scripts
+    git pull
+fi
+
+if [[ -d $HOME/.dotfiles ]]; then
+    echo Checking .dotfiles...
+    cd $HOME/.dotfiles
+    git pull
+fi
+
+if [[ -d $HOME/.vim ]]; then
+    echo Checking .vim...
+    cd $HOME/.vim
+    git pull
+fi
+
+echo Sourcing .bashrc...
+if [[ $(uname -s) == "Darwin" ]]; then
+    source $HOME/.profile
+else
+    source $HOME/.bashrc
+fi
+
+echo Done.
