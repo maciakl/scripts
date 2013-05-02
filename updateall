@@ -8,15 +8,17 @@ if [ -d $HOME/scripts ]; then
     git pull
 fi
 
-if [[ -d $HOME/.dotfiles ]]; then
-    echo Checking .dotfiles...
-    cd $HOME/.dotfiles
-    git pull
-fi
-
 if [[ -d $HOME/.vim ]]; then
     echo Checking .vim...
     cd $HOME/.vim
+    git pull
+    git submodule init
+    git submodule update
+fi
+
+if [[ -d $HOME/.dotfiles ]]; then
+    echo Checking .dotfiles...
+    cd $HOME/.dotfiles
     git pull
 fi
 
