@@ -55,9 +55,11 @@ if [ "$gui" ]; then
       exec "$binary" -g $opts ${1:+"$@"}
       return
     fi
-    exec "$binary" -g $opts --remote-send "<C-\><C-N>:tabnew<CR>" ${1:+"$@"}
+    #exec "$binary" -g $opts --remote-send "<C-\><C-N>:tabnew<CR>" ${1:+"$@"}
+    exec "$binary" -g $opts --remote-silent ${1:+"$@"}
   else
-    exec "$binary" -g $opts --remote-tab-silent ${1:+"$@"}
+    #exec "$binary" -g $opts --remote-tab-silent ${1:+"$@"}
+    exec "$binary" -g $opts --remote-silent ${1:+"$@"}
   fi
 else
 	exec "$binary" $opts ${1:+"$@"}
