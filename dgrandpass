@@ -1,0 +1,17 @@
+#!/bin/bash
+# Generate temporary random dgpasskey (8 chars + 4 ditits)
+#
+# If username is provided as argument it uses simplified form with 1 followed by
+# first two letters of the username.
+
+if [ -z $1 ]; then
+    CHARS=$(cat /dev/urandom | tr -dc 'a-z' | fold -w 32 | head -c 8)
+else
+    tmp=$1
+    CHARS=1${tmp:0:2}xdg
+fi
+
+DIGITS=$(shuf -i 1000-9999 -n 1)
+
+
+echo $CHARS$DIGITS
