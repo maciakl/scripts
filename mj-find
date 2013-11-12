@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Set these environment variables to make it work on other systems
+[ -n "$JOURNAL_DIR" ] || JOURNAL_DIR=~/Dropbox/Apps/Markdown\ Journal
+
+# Make sure journal folder exists
+[ -d "$JOURNAL_DIR" ] || { echo "Journal folder: $JOURNAL_DIR does not exist."; exit 1; }
+
+
+# Check if Ag-silver searcher is installed. If not fall back on Grep
+if command -v ag > /dev/null 2>&1; then
+    SEARCH="ag --color-path 0;35"
+else
+    SEARCH="grep"
+fi
+
+if [[ -n "$1" ]]; then
+    echo -e "\n\n"
+    command -v figlet >/dev/null 2>&1 && { figlet mj-find; }
+    echo "Searching for the term '$1' using $SEARCH."
+    echo -e "\n\n"
+    $SEARCH -i "$1" "$JOURNAL_DIR/"*.markdown
+else
+    echo "No search query. What would you like to search for?"
+    exit 1
+fi

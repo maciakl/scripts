@@ -1,0 +1,43 @@
+#!/bin/bash
+
+PAGE_TITLE=$(date +"%B-%Y")
+
+# Set these environment variables to make it work on other systems
+[ -n "$JOURNAL_BROWSER" ] || JOURNAL_BROWSER=links 
+[ -n "$JOURNAL_DIR" ] || JOURNAL_DIR=/home/luke/Dropbox/Apps/Markdown\ Journal
+[ -n "$JOURNAL_PANDOC_OPTS" ] || JOURNAL_PANDOC_OPTS="--section-divs --title-prefix=$PAGE_TITLE"
+
+# cygwin users - link your dropbox folder in cygwin file system - like: /foo/bar
+# use the unix style path in your variable - the script will translate later
+# you will need windows version of pandoc since cygwin doesn't have it yet
+
+FILE=$(date +"%Y-%m.%B.markdown")
+
+if [ -f "$JOURNAL_DIR/$FILE" ]; then
+
+    # Make sure the script still works under cygwin with windows version of pandoc
+    if [[ $(uname -s) == "CYGWIN"* ]]; then
+        # translate paths to windows ones for pandoc.exe
+        JOURNAL_FILE="$(cygpath -aw "$JOURNAL_DIR")/$FILE"
+        JOURNAL_STYLE="$(cygpath -aw "$JOURNAL_DIR")/style"
+        JOURNAL_TMP="$(cygpath -aw "/tmp")/$$.html"
+    else
+        # use normal unix paths
+        JOURNAL_FILE="$JOURNAL_DIR/$FILE"
+        JOURNAL_STYLE="$JOURNAL_DIR/style"
+        JOURNAL_TMP=/tmp/$$.html
+    fi
+
+    # convert file
+    if [ -f "$JOURNAL_STYLE" ]; then
+        pandoc -s "$JOURNAL_FILE" -H "$JOURNAL_STYLE" -o $JOURNAL_TMP $JOURNAL_PANDOC_OPTS
+    else
+        pandoc -s "$JOURNAL_FILE" -o $JOURNAL_TMP
+    fi
+
+    echo $JOURNAL_TMP
+    # open in a browser
+    eval "$JOURNAL_BROWSER" '$JOURNAL_TMP'
+else
+    echo Sorry, no such file: $JOURNAL_DIR/$FILE
+fi
