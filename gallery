@@ -5,7 +5,7 @@ command -v convert >/dev/null 2>&1 || { echo "ERROR: Please install ImageMagic";
 
 [ -d "./img" ] || { echo "ERROR: Missing the ./img folder. Can't continue."; exit 1; }
 [ -d "./img/$1" ] || { echo "ERROR: Gallery directory ./img/$1 NOT FOUND. Can't continue."; exit 1; }
-[ -d "./_post" ] || { echo "WARNING: Missing ./_post folder. Run from the root of your Jekyll site."; }
+[ -d "./_posts" ] || { echo "WARNING: Missing ./_post folder. Run from the root of your Jekyll site."; }
 
 DIR="img/$1"
 FILES=`ls $DIR/*.???`
