@@ -17,9 +17,9 @@ echo '<div class="row">'
 for i in $FILES
 do
     convert -thumbnail 200 $i $DIR/thumb/${i##*/}
-    echo -e "\t<div class='col-xs-4'>"
-    echo -e "\t\t<a href='/$i' class='thumbnail' >"
-    echo -e "\t\t  <img src='/$DIR/thumb/${i##*/}' alt='thumbnail' /></a>"
+    echo -e "\t<div class=\"col-xs-4\">"
+    echo -e "\t\t<a href=\"/$i\" class=\"thumbnail\" >"
+    echo -e "\t\t  <img src=\"/$DIR/thumb/${i##*/}\" alt=\"thumbnail\" /></a>"
     echo -e "\t</div>"
 done
 
