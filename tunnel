@@ -8,9 +8,10 @@ USAGE+="\t BOUNCE_SERVER\t - Server through which you will be tunneling\n"
 USAGE+="\t DESTINATION\t - Server you want to ssh into.\n"
 USAGE+="\t [BOUNCE_PORT]\t - (optional) BOUNCE_SERVER SSHD port. Default is 22.\n"
 USAGE+="\t [DEST_PORT]\t - (optional) DESTINATION SSHD port. Default is 22.\n"
+USAGE+="\n\t Example:\n\t\t\t tunnel foo.example.com server.example.com 443\n"
 
-[ -z $1 ] && { echo -e "ERROR: no BOUNCE_SERVER.\n\n $USAGE"; exit 1; }
-[ -z $2 ] && { echo -e "ERROR: no DESTINATION.\n\n $USAGE"; exit 1; }
+[ -z $1 ] && { echo -e "\nERROR: no BOUNCE_SERVER.\n\n $USAGE"; exit 1; }
+[ -z $2 ] && { echo -e "\nERROR: no DESTINATION.\n\n $USAGE"; exit 1; }
 
 if [ -z $3 ]; then
     echo -e "WARNING: No BOUNCE_PORT. Assuming 22."
@@ -29,6 +30,7 @@ fi
 BOUNCE_SERVER=$1
 DESTINATION=$2
 
-echo -e "\n\tTunneling to Dreamhost. Use: ssh -p 1234 username@localhost"
+echo -e "\n\tTunneling to $DESTINATION via $BOUNCE_SERVER"
+echo -e "\tTo connect to $DESTINATION use:\n\n\t\tssh -p 1234 localhost\n"
 echo -e "\tUse Ctrl+C to kill the tunnel.\n"
 ssh -p $BOUNCE_PORT -N -T $BOUNCE_SERVER -L 1234:$DESTINATION:$DEST_PORT
