@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# wipe out all vim sessions
+
+if [ -d $HOME/.vimsessions ]; then
+    cd $HOME/.vimsessions
+    rm *
+    rm .session.vim
+    echo All vim sessions were deleted.
+fi
