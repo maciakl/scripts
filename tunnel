@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# Script to tunnel to a remote server from a firewall using a third
+# server in the middle.
+
+USAGE="USAGE:\n\t tunnel BOUNCE_SERVER DESTINATION [BOUNCE_PORT] [DEST_PORT]\n\n"
+USAGE+="\t BOUNCE_SERVER\t - Server through which you will be tunneling\n"
+USAGE+="\t DESTINATION\t - Server you want to ssh into.\n"
+USAGE+="\t [BOUNCE_PORT]\t - (optional) BOUNCE_SERVER SSHD port. Default is 22.\n"
+USAGE+="\t [DEST_PORT]\t - (optional) DESTINATION SSHD port. Default is 22.\n"
+
+[ -z $1 ] && { echo -e "ERROR: no BOUNCE_SERVER.\n\n $USAGE"; exit 1; }
+[ -z $2 ] && { echo -e "ERROR: no DESTINATION.\n\n $USAGE"; exit 1; }
+
+if [ -z $3 ]; then
+    echo -e "WARNING: No BOUNCE_PORT. Assuming 22."
+    BOUNCE_PORT=22
+else
+    BOUNCE_PORT=$3
+fi
+
+if [ -z $4 ]; then
+    echo -e "WARNING: No DEST_PORT. Assuming 22."
+    DEST_PORT=22
+else
+    DEST_PORT=$4
+fi
+
+BOUNCE_SERVER=$1
+DESTINATION=$2
+
+echo -e "\n\tTunneling to Dreamhost. Use: ssh -p 1234 username@localhost"
+echo -e "\tUse Ctrl+C to kill the tunnel.\n"
+ssh -p $BOUNCE_PORT -N -T $BOUNCE_SERVER -L 1234:$DESTINATION:$DEST_PORT
