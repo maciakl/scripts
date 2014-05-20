@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# Connect to a server using an established tunnel. 
+# Complement script for tunnel-create
+
+USAGE="USAGE:\n\t tunnel-create bounce.server.net destination.host.org"
+USAGE+="\n\t tunnel-connect USERNAME TUNNEL_PORT\n\n"
+USAGE+="\t USERNAME\t - username on the destination server (default: same as local).\n"
+USAGE+="\t TUNNEL_PORT\t - the port on which you created the tunnel (default: 1234).\n"
+USAGE+="\n\nRun tunnel-connect for details on how to establish a tunnel.\n"
+
+command -v tunnel-create >/dev/null 2>&1 || { echo -e "\nERROR The tunnel-create script not found. Please install and try again.\n\n$USAGE"; exit 1; }
+ps -C tunnel-create >/dev/null 2>&1 || { echo -e "\nERROR: please establish the tunnel.\n\n$USAGE"; exit 1; }
+
+if [ -z $1 ]; then
+    echo -e "WARNING: No USERNAME. Assuming $(whoami)"
+    USERNAME=$(whoami)
+else
+    USERNAME=$1
+fi
+
+if [ -z $2 ]; then
+    echo -e "WARNING: No TUNNEL_PORT Assuming 1234"
+    TUNNEL_PORT=1234
+else
+    TUNNEL_PORT=$2
+fi
+
+# We won't be saving the key to known hosts because we always ssh into localhost, and the server may
+# be different each time, so you would end up with dozens of useless, fake known_hosts entries for localhost
+ssh -q -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -p $TUNNEL_PORT $USERNAME@localhost
