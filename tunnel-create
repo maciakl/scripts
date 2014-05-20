@@ -3,25 +3,27 @@
 # Script to tunnel to a remote server from a firewall using a third
 # server in the middle.
 
-USAGE="USAGE:\n\t tunnel-create BOUNCE_SERVER DESTINATION [BOUNCE_PORT] [DEST_PORT]\n\n"
-USAGE+="\t BOUNCE_SERVER\t - Server through which you will be tunneling\n"
-USAGE+="\t DESTINATION\t - Server you want to ssh into.\n"
-USAGE+="\t [BOUNCE_PORT]\t - (optional) BOUNCE_SERVER SSHD port. Default is 22.\n"
-USAGE+="\t [DEST_PORT]\t - (optional) DESTINATION SSHD port. Default is 22.\n"
+[ -f "$HOME/scripts/colors" ] && source $HOME/scripts/colors
+
+USAGE="USAGE:\n\t tunnel-create $Color_Blue BOUNCE_SERVER DESTINATION$COlor_Off $Color_Cyan[BOUNCE_PORT] [DEST_PORT]$Color_Off\n\n"
+USAGE+="\t $Color_Blue BOUNCE_SERVER$Color_Off\t - Server through which you will be tunneling\n"
+USAGE+="\t $Color_Blue DESTINATION$Color_Off\t - Server you want to ssh into.\n"
+USAGE+="\t $Color_Cyan [BOUNCE_PORT]$Color_Off\t - (optional) BOUNCE_SERVER SSHD port. Default is 22.\n"
+USAGE+="\t $Color_Cyan [DEST_PORT]$Color_Off\t - (optional) DESTINATION SSHD port. Default is 22.\n"
 USAGE+="\n\t Example:\n\t\t\t tunnel-create foo.example.com server.example.com 443\n"
 
-[ -z $1 ] && { echo -e "\nERROR: no BOUNCE_SERVER.\n\n $USAGE"; exit 1; }
-[ -z $2 ] && { echo -e "\nERROR: no DESTINATION.\n\n $USAGE"; exit 1; }
+[ -z $1 ] && { echo -e "\n$Color_Red ERROR:$Color_Off no $Color_Blue BOUNCE_SERVER$Color_Off.\n\n $USAGE"; exit 1; }
+[ -z $2 ] && { echo -e "\n$Color_Red ERROR:$Color_Off no $Color_Blue DESTINATION$Color_Off.\n\n $USAGE"; exit 1; }
 
 if [ -z $3 ]; then
-    echo -e "WARNING: No BOUNCE_PORT. Assuming 22."
+    echo -e "$Color_Yellow WARNING:$Color_Off No BOUNCE_PORT. Assuming 22."
     BOUNCE_PORT=22
 else
     BOUNCE_PORT=$3
 fi
 
 if [ -z $4 ]; then
-    echo -e "WARNING: No DEST_PORT. Assuming 22."
+    echo -e "$Color_Yellow WARNING:$Color_Off No DEST_PORT. Assuming 22."
     DEST_PORT=22
 else
     DEST_PORT=$4
@@ -30,8 +32,8 @@ fi
 BOUNCE_SERVER=$1
 DESTINATION=$2
 
-echo -e "\n\tTunneling to $DESTINATION via $BOUNCE_SERVER"
-echo -e "\n\tListening for connections on port: 1234"
-echo -e "\tTo connect to $DESTINATION use:\n\n\t\ttunnel-connect\n"
-echo -e "\tUse Ctrl+C to kill the tunnel.\n"
+echo -e "\n\tTunneling to $Color_Blue$DESTINATION$Color_Off via $Color_Blue$BOUNCE_SERVER$Color_Off"
+echo -e "\n\tListening for connections on port: $Color_Green 1234$Color_Off"
+echo -e "\tTo connect to $Color_Blue$DESTINATION$Color_Off use:\n\n\t\ttunnel-connect\n"
+echo -e "\t$Color_White Use Ctrl+C to kill the tunnel.$Color_Off\n"
 ssh -p $BOUNCE_PORT -N -T $BOUNCE_SERVER -L 1234:$DESTINATION:$DEST_PORT
