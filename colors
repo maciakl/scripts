@@ -1,5 +1,26 @@
 #!/bin/bash
 
+#   This script defines environment variables which allow you to
+#   easily colorize your scripts.
+#
+#   At the start of your bash script simply source this file like this:
+#
+#       [ -f "$HOME/scripts/colors" ] && source $HOME/scripts/colors
+#
+#   Then you can use all the variables to colorize output like this:
+#
+#       echo -e $Color_Red Foo$Color_Green Bar$Color_Off
+#
+#   Note, you must use -e when you echo.
+#   Also, remember to $Color_Off at the end of each line
+#
+#   If output is being redirected to a file, this script will
+#   silently quit, so all the variables will remain undefined
+#   and the output will be clean
+
+# if not printing to a terminal just exit with no error
+[ -t 1 ] || exit 0;
+
 # Stop applying color
 Color_Off="\033[0m"
 
