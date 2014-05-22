@@ -34,6 +34,6 @@ DESTINATION=$2
 
 echo -e "\n\tTunneling to $Color_Blue$DESTINATION$Color_Off via $Color_Blue$BOUNCE_SERVER$Color_Off"
 echo -e "\n\tListening for connections on port: $Color_Green 1234$Color_Off"
-echo -e "\tTo connect to $Color_Blue$DESTINATION$Color_Off use:\n\n\t\ttunnel-connect\n"
+echo -e "\tTo connect to $Color_Blue$DESTINATION$Color_Off use:\n\n\t\ttunnel-ssh\n"
 echo -e "\t$Color_White Use Ctrl+C to kill the tunnel.$Color_Off\n"
 ssh -p $BOUNCE_PORT -N -T $BOUNCE_SERVER -L 1234:$DESTINATION:$DEST_PORT

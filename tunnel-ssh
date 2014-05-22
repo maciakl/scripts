@@ -6,10 +6,10 @@
 [ -f "$HOME/scripts/colors" ] && source $HOME/scripts/colors
 
 USAGE="USAGE:\n\t tunnel-create $Color_Blue bounce.server.net destination.host.org$Color_Off"
-USAGE+="\n\t tunnel-connect $Color_Cyan[USERNAME] [TUNNEL_PORT]$Color_Off\n\n"
+USAGE+="\n\t tunnel-ssh $Color_Cyan[USERNAME] [TUNNEL_PORT]$Color_Off\n\n"
 USAGE+="\t $Color_Cyan[USERNAME]$Color_Off\t - username on the destination server (default: same as local).\n"
 USAGE+="\t $Color_Cyan[TUNNEL_PORT]$Color_Off\t - the port on which you created the tunnel (default: $Color_Green 1234$Color_Off).\n"
-USAGE+="\n\nRun tunnel-connect for details on how to establish a tunnel.\n"
+USAGE+="\n\nRun tunnel-ssh for details on how to establish a tunnel.\n"
 
 command -v tunnel-create >/dev/null 2>&1 || { echo -e "\n$COlor_Red ERROR:$Color_Off The tunnel-create script not found. Please install and try again.\n\n$USAGE"; exit 1; }
 ps -C tunnel-create >/dev/null 2>&1 || { echo -e "\n$Color_Red ERROR:$Color_Off please establish the tunnel.\n\n$USAGE"; exit 1; }
