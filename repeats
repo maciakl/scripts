@@ -6,7 +6,7 @@
 command -v awk >/dev/null 2>&1 || { echo "AWK not found. Please install it and try again"; exit 1; }
 
 if [ -z $1 ]; then
-    echo "Usage: how-often-do-i-repeat [word] <file>"
+    echo "Usage: repeats [word] <file>"
     echo "  [word] - word to be counted"
     echo "  <file> - file you want to count the occurrences of word in"
     echo "           If not specified, expects STDIN input"
