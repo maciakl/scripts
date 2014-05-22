@@ -14,6 +14,10 @@
 # use colors if available
 [ -f "$HOME/scripts/colors" ] && source $HOME/scripts/colors
 
+command -v awk >/dev/null 2>&1 || { echo -e "$Color_Red ERROR:$Color_Off $Color_White awk$Color_Off not found. Please install it and try again"; exit 1; }
+command -v du >/dev/null 2>&1 || { echo -e "$Color_Red ERROR:$Color_Off $Color_White du$Color_Off not found. Please install it and try again"; exit 1; }
+command -v df >/dev/null 2>&1 || { echo -e "$Color_Red ERROR:$Color_Off $Color_White df$Color_Off not found. Please install it and try again"; exit 1; }
+
 # grab the % usage of the primary partition (typically line 2, col 5 on df)
 read USAGE <<< $( df -h | awk 'FNR == 2 { print $5 }' )
 
