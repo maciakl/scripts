@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# SCP to a server using an established tunnel. 
+# Complement script for tunnel-create
+
+[ -f "$HOME/scripts/colors" ] && source $HOME/scripts/colors
+
+USAGE="USAGE:\n\t tunnel-create $Color_Blue bounce.server.net destination.host.org$Color_Off"
+USAGE+="\n\t tunnel-put $Color_Blue SOURCE DESTINATION$Color_Off $Color_Cyan[USERNAME] [TUNNEL_PORT]$Color_Off\n\n"
+USAGE+="\t $Color_Blue SOURCE$Color_Off\t - absolute path to source dir on remote host (eg. /path/to/file.html).\n"
+USAGE+="\t $Color_Blue DESTINATION$Color_Off\t - path to destination folder (eg. ~/some/folder).\n"
+USAGE+="\t $Color_Cyan [USERNAME]$Color_Off\t - username on the destination server (default: same as local).\n"
+USAGE+="\t $Color_Cyan [TUNNEL_PORT]$Color_Off\t - the port on which you created the tunnel (default: $Color_Green 1234$Color_Off).\n"
+USAGE+=" EXAMPLE:\n\t tunnel-get /path/to/files/*.html ~/public_html/"
+USAGE+="\n\nRun $Color_White tunnel-create$Color_Off for details on how to establish a tunnel.\n"
+
+command -v tunnel-create >/dev/null 2>&1 || { echo -e "\n$COlor_Red ERROR:$Color_Off The tunnel-create script not found. Please install and try again.\n\n$USAGE"; exit 1; }
+ps -C tunnel-create >/dev/null 2>&1 || { echo -e "\n$Color_Red ERROR:$Color_Off please establish the tunnel.\n\n$USAGE"; exit 1; }
+
+[ -z $1 ] && { echo -e "\n$Color_Red ERROR:$Color_Off no $Color_Blue SOURCE$Color_Off.\n\n $USAGE"; exit 1; }
+[ -z $2 ] && { echo -e "\n$Color_Red ERROR:$Color_Off no $Color_Blue DESTINATION$Color_Off.\n\n $USAGE"; exit 1; }
+
+if [ -z $3 ]; then
+    echo -e "$Color_Yellow WARNING:$Color_Off No $Color_Cyan USERNAME$Color_Off. Assuming $Color_Green$(whoami)$Color_Off"
+    USERNAME=$(whoami)
+else
+    USERNAME=$3
+fi
+
+if [ -z $4 ]; then
+    echo -e "$Color_Yellow WARNING:$Color_Off No $Color_Cyan TUNNEL_PORT$Color_Off Assuming $Color_Green 1234$Color_Off"
+    TUNNEL_PORT=1234
+else
+    TUNNEL_PORT=$4
+fi
+
+# We won't be saving the key to known hosts because we always ssh into localhost, and the server may
+# be different each time, so you would end up with dozens of useless, fake known_hosts entries for localhost
+scp -P $TUNNEL_PORT -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $USERNAME@localhost:$1 $2
