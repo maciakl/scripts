@@ -6,19 +6,23 @@ command -v jpegtran >/dev/null 2>&1 || { echo "JPEGTRAN not found. Please instal
 if test -z $1; then { echo "No directory specified."; echo "Usage: jpegran [DIRNAME]"; exit 1; }; fi
 [ -d $1 ] || { echo "$1 is not a directory"; exit 1; }
 
+TMPDIR=/tmp
+# Uncomment if using Cygwin with the windows version of jpegtran
+[[ $(uname -s) == "CYGWIN"* ]] && TMPDIR=`cygpath -d /tmp`
+
 jpegs=$(find $1 -iname "*.jpg" | wc -l)
 count=1
 echo "Found $jpegs files for conversion..."
 
 for f in `find $1 -iname "*.jpg"`;
 do
-    echo -n "Optimizing ["
+    echo -ne "Optimizing ["
     for in in $(seq 1 $count); do echo -n '#'; done
     for i in $(seq $count $jpegs); do echo -n ' '; done
-    echo -n "] file $count/$jpegs ( $f ) \r"
+    echo -ne "] file $count/$jpegs ( $f ) \r"
 
     count=$((count+1))	
-	jpegtran -copy none -progressive -outfile /tmp/$$ "$f"
-	mv -f /tmp/$$ $f
+	jpegtran -copy none -progressive -outfile $TMPDIR/$$ "$f"
+	mv -f $TMPDIR/$$ $f
 done;
-echo "\n$count files optimized."
+echo -ne "\n$count files optimized.\n"
