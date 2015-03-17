@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Script to tunnel to a remote server from a firewall using a third
+# server in the middle.
+
+[ -f "$HOME/scripts/colors" ] && source $HOME/scripts/colors
+
+USAGE="USAGE:\n\t tunnel-btsync $Color_Blue BOUNCE_SERVER$COlor_Off $Color_Cyan[BOUNCE_PORT]$Color_Off\n\n"
+USAGE+="\t $Color_Blue BOUNCE_SERVER$Color_Off\t - Server through which you will be tunneling\n"
+USAGE+="\t $Color_Cyan [BOUNCE_PORT]$Color_Off\t - (optional) BOUNCE_SERVER SSHD port. Default is 22.\n"
+USAGE+="\n\t Example:\n\t\t\t tunnel-btsync foo.example.com 443\n"
+
+( [ -z $1 ] && [ -z $BOUNCE_SERVER ] ) && { echo -e "\n$Color_Red ERROR:$Color_Off no $Color_Blue BOUNCE_SERVER$Color_Off.\n\n $USAGE"; exit 1; }
+
+if ( [ -z $2 ] && [ -z $BOUNCE_PORT ]); then
+    echo -e "$Color_Yellow WARNING:$Color_Off No BOUNCE_PORT. Assuming 22."
+    BOUNCE_PORT=22
+else
+    [[ -z $2 ]] || { BOUNCE_PORT=$2; }
+fi
+
+[ -z $1 ] || BOUNCE_SERVER=$1;
+DEST_PORT=9988
+
+echo -e "\n\tTunneling via $Color_Blue$BOUNCE_SERVER$Color_Off on port$Color_Green $BOUNCE_PORT$Color_Off"
+echo -e "\n\tListening for connections on port: $Color_Green $DEST_PORT$Color_Off"
+echo -e "\n\t$Color_White Use Ctrl+C to kill the tunnel.$Color_Off\n"
+ssh -D $DEST_PORT $BOUNCE_SERVER -N -p $BOUNCE_PORT
