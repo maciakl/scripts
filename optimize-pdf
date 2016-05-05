@@ -1,0 +1,23 @@
+#!/bin/bash
+backupdir=/tmp/PDF-BACKUPS
+
+[ -z $1 ] && { echo "ERROR: Please specify the file to be optimized."; exit 1; }
+[ -f $1 ] || { echo "ERROR: The following file was not found: $1"; exit 1; }
+file $1 | grep -q "PDF document" || { echo "ERROR: The following file is not a PDF: $1"; exit 1; }
+command -v gs >/dev/null 2>&1 || { echo "ERROR: Ghostscript not found. Please install it and try again"; exit 1; }
+
+tempfile=/tmp/$$.pdf
+directory=$(dirname $1)
+filename=$(basename $1)
+backuppath=$backupdir/$$-$filename
+
+gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE -dQUIET -dBATCH -sOutputFile=$tempfile $1
+[ -e $tempfile ] || { echo "ERROR: Something went wrong. File not optimized."; exit 1; }
+
+if [ ! -d $backupdir ]; then 
+    mkdir $backupdir
+fi
+
+echo Backing up the original to $backuppath
+mv $1 $backuppath
+mv $tempfile $directory/$filename
