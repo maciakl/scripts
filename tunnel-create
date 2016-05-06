@@ -12,25 +12,37 @@ USAGE+="\t $Color_Cyan [BOUNCE_PORT]$Color_Off\t - (optional) BOUNCE_SERVER SSHD
 USAGE+="\t $Color_Cyan [DEST_PORT]$Color_Off\t - (optional) DESTINATION SSHD port. Default is 22.\n"
 USAGE+="\n\t Example:\n\t\t\t tunnel-create foo.example.com server.example.com 443\n"
 
-[ -z $1 ] && { echo -e "\n$Color_Red ERROR:$Color_Off no $Color_Blue BOUNCE_SERVER$Color_Off.\n\n $USAGE"; exit 1; }
-[ -z $2 ] && { echo -e "\n$Color_Red ERROR:$Color_Off no $Color_Blue DESTINATION$Color_Off.\n\n $USAGE"; exit 1; }
+if [ -z $DEFAULT_TUNNEL_BOUNCE_SERVER ]; then
+    [ -z $1 ] && { echo -e "\n$Color_Red ERROR:$Color_Off no $Color_Blue BOUNCE_SERVER$Color_Off.\n\n $USAGE"; exit 1; }
+    BOUNCE_SERVER=$1
+else
+    BOUNCE_SERVER=$DEFAULT_TUNNEL_BOUNCE_SERVER
+fi
+
+if [ -z $DEFAULT_TUNNEL_DESTINATION_SERVER ]; then
+    [ -z $2 ] && { echo -e "\n$Color_Red ERROR:$Color_Off no $Color_Blue DESTINATION$Color_Off.\n\n $USAGE"; exit 1; }
+    DESTINATION=$2
+else
+    DESTINATION=$DEFAULT_TUNNEL_DESTINATION_SERVER
+fi
+
 
 if [ -z $3 ]; then
-    echo -e "$Color_Yellow WARNING:$Color_Off No BOUNCE_PORT. Assuming 22."
     BOUNCE_PORT=22
+    [ -z $DEFAULT_TUNNEL_BOUNCE_PORT ] || BOUNCE_PORT=$DEFAULT_TUNNEL_BOUNCE_PORT
+    echo -e "$Color_Yellow WARNING:$Color_Off No BOUNCE_PORT. Assuming $BOUNCE_PORT."
 else
     BOUNCE_PORT=$3
 fi
 
 if [ -z $4 ]; then
-    echo -e "$Color_Yellow WARNING:$Color_Off No DEST_PORT. Assuming 22."
     DEST_PORT=22
+    [ -z $DEFAULT_TUNNEL_DESTINATION_PORT ] || DEST_PORT=$DEFAULT_TUNNEL_DESTINATION_PORT
+    echo -e "$Color_Yellow WARNING:$Color_Off No DEST_PORT. Assuming $DEST_PORT."
 else
     DEST_PORT=$4
 fi
 
-BOUNCE_SERVER=$1
-DESTINATION=$2
 
 echo -e "\n\tTunneling to $Color_Blue$DESTINATION$Color_Off via $Color_Blue$BOUNCE_SERVER$Color_Off"
 echo -e "\n\tListening for connections on port: $Color_Green 1234$Color_Off"

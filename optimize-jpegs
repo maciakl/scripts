@@ -3,7 +3,7 @@
 # Run jpegtran recursively on an entire directory
 
 command -v jpegtran >/dev/null 2>&1 || { echo "JPEGTRAN not found. Please install it and try again"; exit 1; }
-if test -z $1; then { echo "No directory specified."; echo "Usage: jpegran [DIRNAME]"; exit 1; }; fi
+if test -z $1; then { echo "No directory specified."; echo "Usage: optimize-jpegs [DIRNAME]"; exit 1; }; fi
 [ -d $1 ] || { echo "$1 is not a directory"; exit 1; }
 
 TMPDIR=/tmp
